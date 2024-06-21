@@ -1,6 +1,5 @@
-const express = require('express');
-const app = express();
 const User = require('../models/userModel');
+const getToken = require('../createToken');
 
 async function signup(req,res){
     try{
@@ -24,7 +23,8 @@ async function login(req,res){
     let user = await User.findOne({email});
     if(user){
         if(password == user.password){
-            res.send("login success");
+            let token = getToken(user._id)
+            res.send({message:"login success",token});
         }
         else{
             res.status(400).send("Password incorrect");
